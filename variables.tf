@@ -123,6 +123,16 @@ variable "force_delete" {
   default     = false
 }
 
+variable "high_cpu_threshold" {
+  description = "The threshold for CPUusage metric to define it is high (%). Default: 80%"
+  default     = 80
+}
+
+variable "low_cpu_threshold" {
+  description = "The threshold for CPUusage metric to define it is low (%). Default: 10%"
+  default     = 10
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # AWS LOAD BALANCER
 # ---------------------------------------------------------------------------------------------------------------------

@@ -54,7 +54,7 @@ resource "aws_security_group" "instance_sg" {
 }
 
 resource "aws_launch_configuration" "launch_configuration" {
-  name_prefix            = "${var.app}-lc"
+  name                   = "${var.app}-lc"
   image_id               = var.image_id
   instance_type          = var.instance_type
   security_groups        = ["${aws_security_group.instance_sg.id}"]
@@ -68,7 +68,7 @@ resource "aws_launch_configuration" "launch_configuration" {
 }
 
 resource "aws_autoscaling_group" "autosg_gr" {
-  name = "${var.app}-auto-sg"
+  name                      = "${var.app}-auto-sg"
 
   launch_configuration      = aws_launch_configuration.launch_configuration.id
   vpc_zone_identifier       = data.aws_subnet_ids.subnet_ids.ids
@@ -76,14 +76,14 @@ resource "aws_autoscaling_group" "autosg_gr" {
   health_check_grace_period = var.health_check_grace_period
   force_delete              = var.force_delete
   
-  min_size = var.min_size
-  max_size = var.max_size
-  desired_capacity = var.desired_capacity
+  min_size                  = var.min_size
+  max_size                  = var.max_size
+  desired_capacity          = var.desired_capacity
 
   tags = [
     {
-      key = "Name"
-      value = "${var.app}-sg"
+      key                 = "Name"
+      value               = "${var.app}-sg"
       propagate_at_launch = true
     }
   ]
@@ -117,7 +117,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high_alarm" {
   namespace           = "AWS/EC2"
   period              = "60"
   statistic           = "Average"
-  threshold           = "80"
+  threshold           = "${var.high_cpu_threshold}"
   actions_enabled     = true
   alarm_actions       = ["${aws_autoscaling_policy.cpu_high.arn}"]
   dimensions = {
@@ -133,7 +133,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low_alarm" {
   namespace           = "AWS/EC2"
   period              = "60"
   statistic           = "Average"
-  threshold           = "10"
+  threshold           = "${var.low_cpu_threshold}"
   actions_enabled     = true
   alarm_actions       = ["${aws_autoscaling_policy.cpu_low.arn}"]
   dimensions = {
@@ -142,7 +142,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low_alarm" {
 }
 
 resource "aws_security_group" "app_lb_sg" {
-  name        = "${var.app}-lb-sg"
+  name = "${var.app}-lb-sg"
   description = "Security group configuration for ${var.app} load balancer"
 
   dynamic "ingress" {
@@ -171,18 +171,18 @@ resource "aws_security_group" "app_lb_sg" {
 }
 
 resource "aws_lb" "alb" {  
-  name            = "${var.app}-alb" 
+  name               = "${var.app}-alb" 
   load_balancer_type = "application"
-  subnets         = var.subnets
-  security_groups = ["${aws_security_group.app_lb_sg.id}"]
-  internal        = false 
-  idle_timeout    = 60
+  subnets            = var.subnets
+  security_groups    = ["${aws_security_group.app_lb_sg.id}"]
+  internal           = false 
+  idle_timeout       = 60
 }
 
 resource "aws_lb_target_group" "target_group" {
-	name	= "${var.app}-target-group"
-	vpc_id	= data.aws_vpc.default.id
-	port	= "80"
+	name	    = "${var.app}-target-group"
+	vpc_id	  = data.aws_vpc.default.id
+	port	    = "80"
 	protocol	= "HTTP"
 
   stickiness {    
