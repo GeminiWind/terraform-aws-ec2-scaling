@@ -1,0 +1,91 @@
+
+# ---------------------------------------------------------------------------------------------------------------------
+# AWS Provider Configuration
+# ---------------------------------------------------------------------------------------------------------------------
+aws_region = "ap-southeast-2"
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Application Configuration
+# ---------------------------------------------------------------------------------------------------------------------
+stage ="dev"
+app="rainbow"
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Launch Configuration
+# ---------------------------------------------------------------------------------------------------------------------
+image_id = "ami-0b8b10b5bf11f3a22"
+instance_type = "t2.micro"
+key_name = "raibow-public-key"
+user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install httpd -y
+              systemctl start httpd
+              systemctl enable httpd
+              cat 'Hello World' > /var/www/html/index.html
+              EOF
+instance_ingress = [
+  {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  },
+  {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  },
+  {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+]
+instance_egress = [
+  {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+]
+enable_monitoring = false
+ebs_optimized = false
+
+# ---------------------------------------------------------------------------------------------------------------------
+# AWS EC2 AUTO SCALING GROUP
+# ---------------------------------------------------------------------------------------------------------------------
+
+max_size = 1
+min_size = 1
+desired_capacity = 1
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Load Balancer
+# ---------------------------------------------------------------------------------------------------------------------
+subnets = ["subnet-d24c7b9b", "subnet-d6f0cab1"]
+lb_ingress = [
+  {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  },
+  {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+]
+lb_egress = [
+  {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+]
