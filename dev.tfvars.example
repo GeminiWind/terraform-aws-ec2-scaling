@@ -22,7 +22,8 @@ user_data = <<-EOF
               yum install httpd -y
               systemctl start httpd
               systemctl enable httpd
-              cat 'Hello World' > /var/www/html/index.html
+              sudo chown -R ec2-user /var/www/html
+              echo '<h1>Hello World</h1>' > /var/www/html/index.html
               EOF
 instance_ingress = [
   {
@@ -65,6 +66,8 @@ desired_capacity = 1
 
 high_cpu_threshold = 80
 low_cpu_threshold = 10
+
+sns_topic_name = "rainbow-sg-topic"
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Load Balancer

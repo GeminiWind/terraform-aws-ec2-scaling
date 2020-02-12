@@ -141,6 +141,28 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low_alarm" {
   }
 }
 
+resource "aws_sns_topic" "sns_topic" {
+  # If sns_topic_arn was not provided, create new one
+  count = var.sns_topic_arn == "" ? 1 : 0
+  name = var.sns_topic_name
+}
+
+# Notification for AutoScaling Grup through SNS 
+resource "aws_autoscaling_notification" "example_notifications" {
+  group_names = [
+    "${aws_autoscaling_group.autosg_gr.name}",
+  ]
+
+  notifications = [
+    "autoscaling:EC2_INSTANCE_LAUNCH",
+    "autoscaling:EC2_INSTANCE_TERMINATE",
+    "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+    "autoscaling:EC2_INSTANCE_TERMINATE_ERROR",
+  ]
+  
+  topic_arn = "${var.sns_topic_arn == "" ? aws_sns_topic.sns_topic[0].arn : var.sns_topic_arn }"
+}
+
 resource "aws_security_group" "app_lb_sg" {
   name = "${var.app}-lb-sg"
   description = "Security group configuration for ${var.app} load balancer"

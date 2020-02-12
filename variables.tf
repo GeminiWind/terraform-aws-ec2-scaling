@@ -133,6 +133,17 @@ variable "low_cpu_threshold" {
   default     = 10
 }
 
+variable "sns_topic_arn" {
+  description = "(Optional)SNS Topic ARN to send notification. If no SNS Topic ARN was provided, please specify sns_topic_name to create new one"
+  default     = ""
+  type        = string
+}
+
+variable "sns_topic_name" {
+  description = "SNS Topic name to send notification"
+  type        = string
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # AWS LOAD BALANCER
 # ---------------------------------------------------------------------------------------------------------------------
