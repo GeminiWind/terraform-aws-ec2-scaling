@@ -144,6 +144,11 @@ variable "sns_topic_name" {
   type        = string
 }
 
+variable "emails" {
+  description = "List of email addresses to be retrieved notification, seperated by space"
+  type        = string
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # AWS LOAD BALANCER
 # ---------------------------------------------------------------------------------------------------------------------

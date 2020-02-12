@@ -147,6 +147,16 @@ resource "aws_sns_topic" "sns_topic" {
   name = var.sns_topic_name
 }
 
+resource "null_resource" "add_email_subsciption" {
+  provisioner "local-exec" {
+    command = "sh scripts/sns_add_email_subscription.sh"
+    environment = {
+      sns_arn = "${var.sns_topic_arn == "" ? aws_sns_topic.sns_topic[0].arn : var.sns_topic_arn }"
+      sns_emails = var.emails
+    }
+  }
+}
+
 # Notification for AutoScaling Grup through SNS 
 resource "aws_autoscaling_notification" "example_notifications" {
   group_names = [

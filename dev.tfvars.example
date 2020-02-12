@@ -68,6 +68,7 @@ high_cpu_threshold = 80
 low_cpu_threshold = 10
 
 sns_topic_name = "rainbow-sg-topic"
+emails = "gemini.wind285@gmail.com"
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Load Balancer

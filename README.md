@@ -13,6 +13,7 @@ Build high availability, fault tolerance and secured application by AutoScaling 
 
 - Provide ability to scale up/scale down application by your specified `CPUUsage` threshold metric
 - High availability and fault tolerance by using AutoScaling Group + Application Load Balancer
+- Retrieve email notification from AutoScaling Group through SNS Topic
 
 ## Prerequisites
 - Make sure you're aws keys are set up in `~/.aws/credentials` to run AWS CLI
