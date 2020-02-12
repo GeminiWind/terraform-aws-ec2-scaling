@@ -2,12 +2,17 @@
  
 Build high availability, fault tolerance and secured application by AutoScaling Group + Load Balancer
 
+[![](https://img.shields.io/github/license/GeminiWind/terraform-aws-ec2-scaling)](https://github.com/GeminiWind/terraform-aws-ec2-scaling)
+[![](https://img.shields.io/github/issues/GeminiWind/terraform-aws-ec2-scaling)](https://github.com/GeminiWind/terraform-aws-ec2-scaling)
+[![](https://img.shields.io/github/issues-closed/GeminiWind/terraform-aws-ec2-scaling)](https://github.com/GeminiWind/terraform-aws-ec2-scaling)
+[![](https://img.shields.io/github/languages/code-size/GeminiWind/terraform-aws-ec2-scaling)](https://github.com/GeminiWind/terraform-aws-ec2-scaling)
+[![](https://img.shields.io/github/repo-size/GeminiWind/terraform-aws-ec2-scaling)](https://github.com/GeminiWind/terraform-aws-ec2-scaling)
+
+
 ## Features
 
-- Provide ability to scale up/scale down application by `CPUUsage` metrics
+- Provide ability to scale up/scale down application by your specified `CPUUsage` threshold metric
 - High availability and fault tolerance by using AutoScaling Group + Application Load Balancer
-- TLS with `ACM`
-- Integrate with Route53
 
 ## Prerequisites
 - Make sure you're aws keys are set up in `~/.aws/credentials` to run AWS CLI
@@ -34,11 +39,13 @@ module "static-website" {
 | region | AWS Deployed Region (i.e. `ap-southeast-1`) | string | - | yes |
 | app | App name | string | - | yes |
 | stage | Deployed stage (i.e `dev`, `staging`, `prod`) | string | `dev` | yes |
+| image_id | An AMI ID | string | `dev` | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| website_url | Website URL |
+| private_key | Private key to SSH through your EC2 instances |
+| lb_dns | DNS Nam of Application Load Balancer |
 
 ## Todos
